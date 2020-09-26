@@ -7,6 +7,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r}
+devtools::install_github("amir1m/BLNN", build_vignettes = FALSE)
+```
+
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -66,14 +71,20 @@ ClassHMC <- BLNN_Train(NET = ClassNet,
                           x = data,
                           y = targ,
                           iter = 10000,
-                          chains = 1,
+                          chains = 4,
                           algorithm = "HMC",
-                          display = 0, control = list(adapt_delta = 0.8,
+                          display = 0,cores = 4,control = list(adapt_delta = 0.8,
                                                       Lambda = 0.005,
                                                       stepsize=5,
                                                       gamma=2)
                         )
 ```
+
+```{r}
+summary(ClassHMC)
+```
+
+
 
 ```{r}
 ClassNUTS <- BLNN_Train(NET = ClassNet,
@@ -166,7 +177,7 @@ for(i in 1:150){
   NUTSpredClass[i, lev[i]]<-1
 }
 
-names(NUTSCpredClass)<-c("Set", "Ver", "Vir")
+names(NUTSpredClass)<-c("Set", "Ver", "Vir")
 #################3
 HMCpredEVEClass<-matrix(0, nrow=nrow(iris), ncol=3)
 lev<-as.factor(HMCpredEVE)
@@ -182,7 +193,7 @@ for(i in 1:150){
   NUTSpredEVEClass[i, lev[i]]<-1
 }
 
-names(NUTSCpredEVEClass)<-c("Set", "Ver", "Vir")
+names(NUTSpredEVEClass)<-c("Set", "Ver", "Vir")
 ```
 
 With the predictions for each method we can organize and examine the contingency tables of each method to see their overall predictive accuracu.
